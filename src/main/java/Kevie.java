@@ -2,14 +2,14 @@ import java.util.Scanner;
 
 public class Kevie {
 
-    public static final String KEVIE_PREFIX = "[Kevie]";
-    public static final String USER_PREFIX = "[You]";
-    public static final String IDENTATION = "  ";
+    public static final String PREFIX_KEVIE = "[Kevie]";
+    public static final String PREFIX_USER = "[You]";
+    public static final String PREFIX_INDENT = "  ";
     public static final int LIST_MAX_LEN = 100;
 
     public static void kevieTalk(String msg)
     {
-        System.out.println(KEVIE_PREFIX + " " + msg);
+        System.out.println(PREFIX_KEVIE + " " + msg);
     }
 
     public static void main(String[] args) {
@@ -33,7 +33,7 @@ public class Kevie {
         Scanner scanner = new Scanner(System.in);
         while(true)
         {
-            System.out.print(USER_PREFIX + " ");
+            System.out.print(PREFIX_USER + " ");
             String input = scanner.nextLine();
             String[] inputArgs = input.split(" ");
 
@@ -43,7 +43,7 @@ public class Kevie {
             {
                 kevieTalk("Ok my guy, here is your list:");
                 for (int i = 0; i < itemListLen; i++) {
-                    System.out.println(IDENTATION + (i+1) + ". " + itemList[i].toString());
+                    System.out.println(PREFIX_INDENT + (i+1) + ". " + itemList[i].toString());
                 }
                 continue;
             }
@@ -54,7 +54,8 @@ public class Kevie {
                     int markNo = Integer.parseInt(inputArgs[1]);
                     if (markNo > itemListLen)
                     {
-                        kevieTalk("There are only " + itemListLen + " tasks, yet you want to mark task " + markNo + " as done? Try again bro.");
+                        kevieTalk("There are only " + itemListLen + " tasks, yet you want to mark task " + markNo
+                                + " as done? Try again bro.");
                         continue;
                     }
                     else if (markNo < 1)
@@ -64,13 +65,11 @@ public class Kevie {
                     }
 
                     Task markedTask = itemList[markNo - 1];
-
                     markedTask.setDone(true);
                     kevieTalk("Ok! I have marked a task as done: ");
-                    System.out.println(IDENTATION + markedTask.toString());
+                    System.out.println(PREFIX_INDENT + markedTask.toString());
                     continue;
-                }
-                catch(NumberFormatException e) {}
+                } catch (NumberFormatException e) {}
             }
 
             if (inputArgs[0].equals("unmark") && inputArgs.length == 2)
@@ -79,7 +78,8 @@ public class Kevie {
                     int markNo = Integer.parseInt(inputArgs[1]);
                     if (markNo > itemListLen)
                     {
-                        kevieTalk("There are only " + itemListLen + " tasks, yet you want to unmark task " + markNo + "? Try again bro.");
+                        kevieTalk("There are only " + itemListLen + " tasks, yet you want to unmark task " + markNo
+                                + "? Try again bro.");
                         continue;
                     }
                     else if (markNo < 1)
@@ -89,10 +89,9 @@ public class Kevie {
                     }
 
                     Task markedTask = itemList[markNo - 1];
-
                     markedTask.setDone(false);
                     kevieTalk("Ok! I have marked a task as undone:");
-                    System.out.println(IDENTATION + markedTask.toString());
+                    System.out.println(PREFIX_INDENT + markedTask.toString());
                     continue;
                 }
                 catch(NumberFormatException e) {}
@@ -102,7 +101,7 @@ public class Kevie {
             itemList[itemListLen] = newTask;
             itemListLen++;
             kevieTalk("Ok! I added a new task:");
-            System.out.println(IDENTATION + newTask.toString());
+            System.out.println(PREFIX_INDENT + newTask.toString());
         }
 
         kevieTalk("Bye bye! See you later!");
