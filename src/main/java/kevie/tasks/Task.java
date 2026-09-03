@@ -1,3 +1,5 @@
+package kevie.tasks;
+
 public class Task {
 
     private final static char NOT_DONE_CHAR = '\u2610';

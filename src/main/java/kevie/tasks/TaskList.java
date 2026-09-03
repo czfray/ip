@@ -1,4 +1,9 @@
+package kevie.tasks;
+
 public class TaskList {
+
+    private static final int LIST_MAX_LEN = 100;
+    public static TaskList instance = new TaskList(LIST_MAX_LEN);
 
     private Task[] tasks;
     private int length;
