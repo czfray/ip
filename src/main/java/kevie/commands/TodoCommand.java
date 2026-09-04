@@ -12,7 +12,8 @@ public class TodoCommand extends Command {
     @Override
     public boolean execute(String arg) {
         if (arg == null){
-            Kevie.speak("You need to tell me what you want to do bro!");
+            Kevie.speak("You need to tell me the name of your todo task!");
+            help();
             return false;
         }
         Todo newTodo = new Todo(arg);
@@ -21,5 +22,15 @@ public class TodoCommand extends Command {
         Kevie.speak(newTodo.toString(), true);
         Kevie.speak("You now have " + TaskList.instance.getLength() + " tasks.", true);
         return false;
+    }
+
+    @Override
+    public String syntax() {
+        return "todo [Name]";
+    }
+
+    @Override
+    public String example() {
+        return "todo CS2113 iP bug fix";
     }
 }
