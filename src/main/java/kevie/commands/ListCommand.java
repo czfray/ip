@@ -5,22 +5,31 @@ import kevie.tasks.TaskList;
 
 public class ListCommand extends Command {
 
-    private String ident;
 
-    public ListCommand(String indent) {
+    public ListCommand() {
         super("list");
-        this.ident = indent;
     }
 
     @Override
     public boolean execute(String arg) {
         if (TaskList.instance.getLength() < 1) {
             Kevie.speak("There ain't anything in your list yet.");
+            Kevie.speak("To add new tasks, do \"todo\", \"deadline\", or \"event\".", true);
             return false;
         }
 
         Kevie.speak("Ok my guy, here is your list:");
-        TaskList.instance.printAll(ident);
+        TaskList.instance.printAll();
         return false;
+    }
+
+    @Override
+    public String syntax() {
+        return "list";
+    }
+
+    @Override
+    public String example() {
+        return "list";
     }
 }

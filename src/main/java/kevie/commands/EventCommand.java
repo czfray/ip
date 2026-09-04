@@ -12,7 +12,8 @@ public class EventCommand extends Command {
     @Override
     public boolean execute(String arg) {
         if (arg == null){
-            Kevie.speak("Specify what kind of event you want me to add!");
+            Kevie.speak("Specify a name and descriptions of your event to me!");
+            help();
             return false;
         }
 
@@ -21,13 +22,20 @@ public class EventCommand extends Command {
         Event newEvent;
 
         try {
-            eventArgs = (arg.split(" /from "));
+            eventArgs = arg.split(" /from ");
             description = eventArgs[0];
             eventArgs = eventArgs[1].split(" /to ");
+        } catch (Exception e) {
+            Kevie.speak("Please make sure to indicate name, start time and end time of the event.");
+            help();
+            return false;
+        }
+
+        try {
             newEvent = new Event(description, eventArgs[0], eventArgs[1]);
-        } catch (Exception e){
-            Kevie.speak("Syntax is bad! Describe an event, put \" /from\" followed by the start time, " +
-                    "then put \" /to\" followed by the end time.");
+        } catch (Exception e) {
+            Kevie.speak("Syntax is bad! You have to tell me when the event ends!");
+            help();
             return false;
         }
 
@@ -36,5 +44,15 @@ public class EventCommand extends Command {
         Kevie.speak(newEvent.toString(), true);
         Kevie.speak("You now have " + TaskList.instance.getLength() + " tasks.", true);
         return false;
+    }
+
+    @Override
+    public String syntax() {
+        return "event [Name] /from [Start Time] /to [End Time]";
+    }
+
+    @Override
+    public String example() {
+        return "event CS2113 team project meeting /from Sep 1st 6pm /to Sep 1st 8pm";
     }
 }

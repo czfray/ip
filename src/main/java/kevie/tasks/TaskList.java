@@ -1,5 +1,7 @@
 package kevie.tasks;
 
+import kevie.Kevie;
+
 public class TaskList {
 
     private static final int LIST_MAX_LEN = 100;
@@ -44,9 +46,9 @@ public class TaskList {
         return length;
     }
 
-    public void printAll(String indentation){
+    public void printAll(){
         for (int i = 0; i < length; i++) {
-            System.out.println(indentation + (i+1) + ". " + tasks[i].toString());
+            Kevie.speak((i + 1) + ". " + tasks[i].toString(), true);
         }
     }
 

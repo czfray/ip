@@ -12,4 +12,15 @@ public class ByeCommand extends Command {
         Kevie.speak("Bye bye! See you later!");
         return true;
     }
+
+    @Override
+    public String syntax() {
+        return "bye";
+    }
+
+    @Override
+    public String example() {
+        return "bye";
+    }
+
 }
