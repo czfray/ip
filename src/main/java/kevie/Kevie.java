@@ -1,6 +1,7 @@
 package kevie;
 
 import kevie.commands.*;
+import kevie.tasks.TaskList;
 
 import java.util.Scanner;
 
@@ -43,6 +44,8 @@ public class Kevie {
     public static void main(String[] args) {
 
         Scanner scanner = new Scanner(System.in);
+
+        TaskList.instance = TaskList.load("tasks.kv");
         initCommands();
 
         System.out.println(BANNER);
@@ -56,5 +59,6 @@ public class Kevie {
             if (Command.scan(input)) break;
         }
 
+        TaskList.instance.save("tasks.kv");
     }
 }

@@ -2,10 +2,16 @@ package kevie.tasks;
 
 import kevie.Kevie;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Scanner;
+import java.util.regex.Pattern;
+
 public class TaskList {
 
     private static final int LIST_MAX_LEN = 100;
-    public static TaskList instance = new TaskList(LIST_MAX_LEN);
+    public static TaskList instance;
 
     private Task[] tasks;
     private int length;
@@ -52,5 +58,49 @@ public class TaskList {
         }
     }
 
+    public void save(String path){
+        try{
 
+            FileWriter writer = new FileWriter(path);
+
+            for (int i = 0; i < getLength(); i++) {
+                writer.write(getTask(i).getRaw());
+                if (i < getLength() - 1) writer.write(System.lineSeparator());
+            }
+
+            writer.close();
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static TaskList load(String path){
+        TaskList tasks = new TaskList(100);
+        try {
+            File file = new File(path);
+            Scanner scanner = new Scanner(file);
+
+            while (scanner.hasNextLine()) {
+                String[] rawArgs = scanner.nextLine().split(Pattern.quote(Task.RAW_SEPERATOR));
+                switch (rawArgs[0]){
+                    case "T":
+                        tasks.addTask(new Todo(rawArgs));
+                        break;
+                    case "D":
+                        tasks.addTask(new Deadline(rawArgs));
+                        break;
+                    case "E":
+                        tasks.addTask(new Event(rawArgs));
+                        break;
+                    default:
+                        break;
+                }
+            }
+            scanner.close();
+        } catch (IOException e) {
+            return new TaskList(100);
+        }
+        return tasks;
+    }
 }

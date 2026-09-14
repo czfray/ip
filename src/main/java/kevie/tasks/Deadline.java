@@ -9,8 +9,24 @@ public class Deadline extends Task{
         this.due = endTime;
     }
 
+    public Deadline(String[] rawArgs){
+        super(rawArgs);
+        this.due = rawArgs[3];
+
+    }
+
     @Override
     public String toString() {
-        return "[D] " + super.toString() + " (due: " + due + ")";
+        return super.toString() + " (due: " + due + ")";
+    }
+
+    @Override
+    public String getRaw() {
+        return super.getRaw() + RAW_SEPERATOR + due;
+    }
+
+    @Override
+    public char getType() {
+        return 'D';
     }
 }

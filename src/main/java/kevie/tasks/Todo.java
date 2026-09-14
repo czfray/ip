@@ -6,8 +6,13 @@ public class Todo extends Task{
         super(name);
     }
 
+    public Todo(String[] rawArgs){
+        super(rawArgs);
+
+    }
+
     @Override
-    public String toString() {
-        return "[T] " + super.toString();
+    public char getType() {
+        return 'T';
     }
 }
