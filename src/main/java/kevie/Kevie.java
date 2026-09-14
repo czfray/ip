@@ -38,6 +38,7 @@ public class Kevie {
         new EventCommand();
         new MarkCommand();
         new UnmarkCommand();
+        new DeleteCommand();
     }
 
     public static void main(String[] args) {

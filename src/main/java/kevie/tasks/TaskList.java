@@ -2,19 +2,17 @@ package kevie.tasks;
 
 import kevie.Kevie;
 
+import java.util.ArrayList;
+
 public class TaskList {
 
     private static final int LIST_MAX_LEN = 100;
     public static TaskList instance = new TaskList(LIST_MAX_LEN);
 
-    private Task[] tasks;
-    private int length;
-    private int maxLength;
+    private ArrayList<Task> tasks;
 
     public TaskList(int maxLength){
-        this.tasks = new Task[maxLength];
-        this.length = 0;
-        this.maxLength = maxLength;
+        tasks = new ArrayList<Task>();
     }
 
     public void addTask(Task newTask){
@@ -23,32 +21,33 @@ public class TaskList {
             return;
         }
 
-        if (length >= maxLength){
-            System.out.println("Task list has already reached maximum of " + maxLength + " tasks.");
+        tasks.add(newTask);
+    }
+
+    public void deleteTask(int index){
+
+        if (index >= tasks.size() || index < 0) {
             return;
         }
-
-        tasks[length] = newTask;
-        length++;
+        tasks.remove(index);
     }
 
     //The index here starts at 0 btw
     public Task getTask(int index){
 
-        if (index >= length || index < 0) {
+        if (index >= tasks.size() || index < 0) {
             return null;
         }
-
-        return tasks[index];
+        return tasks.get(index);
     }
 
     public int getLength() {
-        return length;
+        return tasks.size();
     }
 
     public void printAll(){
-        for (int i = 0; i < length; i++) {
-            Kevie.speak((i + 1) + ". " + tasks[i].toString(), true);
+        for (int i = 0; i < getLength(); i++) {
+            Kevie.speak((i + 1) + ". " + tasks.get(i).toString(), true);
         }
     }
 
