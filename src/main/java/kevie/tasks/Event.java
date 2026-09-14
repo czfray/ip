@@ -1,5 +1,7 @@
 package kevie.tasks;
 
+import kevie.exceptions.TaskIncoRawFormatException;
+
 public class Event extends Task{
 
     private String startTime;
@@ -11,11 +13,14 @@ public class Event extends Task{
         this.endTime = endTime;
     }
 
-    public Event(String[] rawArgs){
+    public Event(String[] rawArgs) throws TaskIncoRawFormatException {
         super(rawArgs);
-        this.startTime = rawArgs[3];
-        this.endTime = rawArgs[4];
-
+        try{
+            this.startTime = rawArgs[3];
+            this.endTime = rawArgs[4];
+        } catch (Exception e){
+            throw new TaskIncoRawFormatException();
+        }
     }
 
     @Override

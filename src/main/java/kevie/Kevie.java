@@ -20,6 +20,7 @@ public class Kevie {
     private static final String PREFIX_BOT = "[Kevie]";
     private static final String PREFIX_USER = "[You]";
     private static final String PREFIX_INDENT = "        ";
+    private static final String SAVE_PATH = "saves/tasks.kv";
 
     public static void speak(String msg, boolean indentOnly) {
         if (!indentOnly) System.out.println(PREFIX_BOT + " " + msg);
@@ -44,12 +45,11 @@ public class Kevie {
     public static void main(String[] args) {
 
         Scanner scanner = new Scanner(System.in);
-
-        TaskList.instance = TaskList.load("tasks.kv");
         initCommands();
 
         System.out.println(BANNER);
         speak("Hey, what's up!");
+        TaskList.instance = TaskList.load(SAVE_PATH);
         speak("Anything you want to get done today?");
 
         while(true)
@@ -58,7 +58,5 @@ public class Kevie {
             String input = scanner.nextLine();
             if (Command.scan(input)) break;
         }
-
-        TaskList.instance.save("tasks.kv");
     }
 }

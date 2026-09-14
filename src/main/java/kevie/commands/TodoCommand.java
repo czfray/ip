@@ -18,6 +18,7 @@ public class TodoCommand extends Command {
         }
         Todo newTodo = new Todo(arg);
         TaskList.instance.addTask(newTodo);
+        TaskList.instance.save();
         Kevie.speak("Alright I added new todo to the list: ");
         Kevie.speak(newTodo.toString(), true);
         Kevie.speak("You now have " + TaskList.instance.getLength() + " tasks.", true);

@@ -1,5 +1,7 @@
 package kevie.tasks;
 
+import kevie.exceptions.TaskIncoRawFormatException;
+
 public class Deadline extends Task{
 
     private String due;
@@ -9,10 +11,13 @@ public class Deadline extends Task{
         this.due = endTime;
     }
 
-    public Deadline(String[] rawArgs){
+    public Deadline(String[] rawArgs) throws TaskIncoRawFormatException {
         super(rawArgs);
-        this.due = rawArgs[3];
-
+        try {
+            this.due = rawArgs[3];
+        } catch (Exception e){
+            throw new TaskIncoRawFormatException();
+        }
     }
 
     @Override

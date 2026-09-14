@@ -34,6 +34,7 @@ public class DeadlineCommand extends Command {
 
         Deadline newDeadline = new Deadline(deadlineArgs[0], deadlineArgs[1]);
         TaskList.instance.addTask(newDeadline);
+        TaskList.instance.save();
         Kevie.speak("Okay I added new deadline to the list: ");
         Kevie.speak(newDeadline.toString(), true);
         Kevie.speak("You now have " + TaskList.instance.getLength() + " tasks.", true);

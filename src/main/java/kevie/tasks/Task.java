@@ -1,5 +1,8 @@
 package kevie.tasks;
 
+import kevie.Kevie;
+import kevie.exceptions.TaskIncoRawFormatException;
+
 public class Task {
 
     private final static char NOT_DONE_CHAR = '\u2610';
@@ -15,9 +18,13 @@ public class Task {
         this.isDone = false;
     }
 
-    public Task(String[] rawArgs) {
-        this.name = rawArgs[1];
-        this.isDone = Boolean.parseBoolean(rawArgs[2]);
+    public Task(String[] rawArgs) throws TaskIncoRawFormatException {
+        try{
+            this.name = rawArgs[1];
+            this.isDone = Boolean.parseBoolean(rawArgs[2]);
+        } catch (Exception e) {
+            throw new TaskIncoRawFormatException();
+        }
     }
 
     public String getName() {
