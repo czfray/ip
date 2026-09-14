@@ -1,18 +1,28 @@
 package kevie.tasks;
 
 import kevie.Kevie;
+import kevie.exceptions.TaskIncoRawFormatException;
+
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Scanner;
+import java.util.regex.Pattern;
 
 import java.util.ArrayList;
 
 public class TaskList {
 
     private static final int LIST_MAX_LEN = 100;
-    public static TaskList instance = new TaskList(LIST_MAX_LEN);
+    public static TaskList instance;
+
 
     private ArrayList<Task> tasks;
+    private String save_path;
 
-    public TaskList(int maxLength){
+    public TaskList(int maxLength, String save_path){
         tasks = new ArrayList<Task>();
+        this.save_path = save_path;
     }
 
     public void addTask(Task newTask){
@@ -51,5 +61,60 @@ public class TaskList {
         }
     }
 
+    public void save(){
+        try{
 
+            FileWriter writer = new FileWriter(save_path);
+
+            for (int i = 0; i < getLength(); i++) {
+                writer.write(getTask(i).getRaw());
+                if (i < getLength() - 1) writer.write(System.lineSeparator());
+            }
+            writer.close();
+
+        } catch (IOException e) {
+            Kevie.speak("I cannot save the list of tasks because an IO error occurred.");
+        }
+    }
+
+    public static TaskList load(String path){
+        TaskList tasks = new TaskList(100, path);
+        int lineNo = 0;
+        try {
+            File file = new File(path);
+            file.getParentFile().mkdirs();
+            file.createNewFile();
+            Scanner scanner = new Scanner(file);
+
+            while (scanner.hasNextLine()) {
+
+                try{
+                    String[] rawArgs = scanner.nextLine().split(Pattern.quote(Task.RAW_SEPERATOR));
+                    lineNo++;
+                    switch (rawArgs[0]){
+                        case "T":
+                            tasks.addTask(new Todo(rawArgs));
+                            break;
+                        case "D":
+                            tasks.addTask(new Deadline(rawArgs));
+                            break;
+                        case "E":
+                            tasks.addTask(new Event(rawArgs));
+                            break;
+                        default:
+                            throw new TaskIncoRawFormatException();
+                    }
+                } catch (TaskIncoRawFormatException e) {
+                    Kevie.speak("I cannot load a task because line " + lineNo + " of save file is corrupted.");
+                    Kevie.speak("I will delete the corrupted line as a result.", true);
+                }
+
+            }
+            scanner.close();
+            tasks.save();
+        } catch (IOException e) {
+            Kevie.speak("I cannot load the tasks from save file because there is an IO error.");
+        }
+        return tasks;
+    }
 }

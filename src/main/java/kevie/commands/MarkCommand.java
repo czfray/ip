@@ -43,6 +43,7 @@ public class MarkCommand extends Command {
             return false;
         }
         markedTask.setDone(true);
+        TaskList.instance.save();
         Kevie.speak("Ok! I have marked a task as done: ");
         Kevie.speak(markedTask.toString(), true);
         return false;

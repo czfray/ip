@@ -38,6 +38,7 @@ public class DeleteCommand extends Command {
 
         Task deleteTask = TaskList.instance.getTask(deleteNo - 1);
         TaskList.instance.deleteTask(deleteNo - 1);
+        TaskList.instance.save();
         Kevie.speak("Can! I have deleted the following task: ");
         Kevie.speak(deleteTask.toString(), true);
         Kevie.speak("You now have " + TaskList.instance.getLength() + " tasks.", true);

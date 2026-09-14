@@ -40,6 +40,7 @@ public class EventCommand extends Command {
         }
 
         TaskList.instance.addTask(newEvent);
+        TaskList.instance.save();
         Kevie.speak("Good! Adding new event to the list: ");
         Kevie.speak(newEvent.toString(), true);
         Kevie.speak("You now have " + TaskList.instance.getLength() + " tasks.", true);

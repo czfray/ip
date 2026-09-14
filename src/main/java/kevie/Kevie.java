@@ -1,6 +1,7 @@
 package kevie;
 
 import kevie.commands.*;
+import kevie.tasks.TaskList;
 
 import java.util.Scanner;
 
@@ -19,6 +20,7 @@ public class Kevie {
     private static final String PREFIX_BOT = "[Kevie]";
     private static final String PREFIX_USER = "[You]";
     private static final String PREFIX_INDENT = "        ";
+    private static final String SAVE_PATH = "saves/tasks.kv";
 
     public static void speak(String msg, boolean indentOnly) {
         if (!indentOnly) System.out.println(PREFIX_BOT + " " + msg);
@@ -48,6 +50,7 @@ public class Kevie {
 
         System.out.println(BANNER);
         speak("Hey, what's up!");
+        TaskList.instance = TaskList.load(SAVE_PATH);
         speak("Anything you want to get done today?");
 
         while(true)
@@ -56,6 +59,5 @@ public class Kevie {
             String input = scanner.nextLine();
             if (Command.scan(input)) break;
         }
-
     }
 }

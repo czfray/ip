@@ -42,6 +42,7 @@ public class UnmarkCommand extends Command {
             return false;
         }
         unmarkedTask.setDone(false);
+        TaskList.instance.save();
         Kevie.speak("Ok! I have marked a task as undone:");
         Kevie.speak(unmarkedTask.toString(), true);
         return false;
