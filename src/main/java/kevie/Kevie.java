@@ -41,6 +41,7 @@ public class Kevie {
         new MarkCommand();
         new UnmarkCommand();
         new DeleteCommand();
+        new FindCommand();
     }
 
     public static void main(String[] args) {
@@ -57,7 +58,7 @@ public class Kevie {
         {
             System.out.print(PREFIX_USER + " ");
             String input = scanner.nextLine();
-            if (Command.scan(input)) break;
+            if (Command.parse(input)) break;
         }
     }
 }

@@ -5,8 +5,8 @@ import kevie.exceptions.TaskIncoRawFormatException;
 
 public class Task {
 
-    private final static char NOT_DONE_CHAR = '\u2610';
-    private final static char DONE_CHAR = '\u2611';
+    private final static String NOT_DONE_CHAR = "[ ]";
+    private final static String DONE_CHAR = "[V]";
     public final static String RAW_SEPERATOR = "\\\\";
 
     private String name;

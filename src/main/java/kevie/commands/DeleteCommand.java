@@ -53,11 +53,11 @@ public class DeleteCommand extends Command {
 
     @Override
     public String syntax() {
-        return "mark [Task No.]";
+        return "delete [Task No.]";
     }
 
     @Override
     public String example() {
-        return "mark 3";
+        return "delete 3";
     }
 }
