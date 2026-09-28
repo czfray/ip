@@ -6,7 +6,17 @@ import kevie.exceptions.*;
 import kevie.tasks.Task;
 import kevie.tasks.TaskList;
 
+/**
+ * Command that deletes a task in the todo list.
+ */
 public class DeleteCommand extends TaskCommand {
+
+    /**
+     * Creates delete command.
+     *
+     * @param ui User interface to print messages in
+     * @param taskList Todo list to modify
+     */
     public DeleteCommand(UserInterface ui, TaskList taskList) {
         super("delete", ui, taskList);
     }

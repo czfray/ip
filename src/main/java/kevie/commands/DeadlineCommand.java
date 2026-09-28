@@ -8,10 +8,19 @@ import kevie.tasks.Deadline;
 import kevie.tasks.Task;
 import kevie.tasks.TaskList;
 
+/**
+ * Command that creates a deadline task in the todo list.
+ */
 public class DeadlineCommand extends TaskCommand {
 
     private final String dueSeperator = "/by";
 
+    /**
+     * Creates deadline command.
+     *
+     * @param ui User interface to print messages in
+     * @param taskList Todo list to modify
+     */
     public DeadlineCommand(UserInterface ui, TaskList taskList) {
         super("deadline", ui, taskList);
     }

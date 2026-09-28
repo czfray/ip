@@ -4,9 +4,17 @@ import kevie.Kevie;
 import kevie.UserInterface;
 import kevie.tasks.TaskList;
 
+/**
+ * Command that lists all the tasks in the todo list.
+ */
 public class ListCommand extends TaskCommand {
 
-
+    /**
+     * Creates list command.
+     *
+     * @param ui User interface to print messages in
+     * @param taskList Todo list to access
+     */
     public ListCommand(UserInterface ui, TaskList taskList) {
         super("list", ui, taskList);
     }

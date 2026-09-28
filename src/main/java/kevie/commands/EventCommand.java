@@ -8,11 +8,20 @@ import kevie.tasks.Event;
 import kevie.tasks.Task;
 import kevie.tasks.TaskList;
 
+/**
+ * Command that creates an event task in the todo list.
+ */
 public class EventCommand extends TaskCommand {
 
     private final String fromSeperator = "/from";
     private final String toSeperator = "/to";
 
+    /**
+     * Creates event command.
+     *
+     * @param ui User interface to print messages in
+     * @param taskList Todo list to modify
+     */
     public EventCommand(UserInterface ui, TaskList taskList) {
         super("event", ui, taskList);
     }

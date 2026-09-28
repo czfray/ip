@@ -6,7 +6,17 @@ import kevie.exceptions.*;
 import kevie.tasks.Task;
 import kevie.tasks.TaskList;
 
+/**
+ * Command that marks a task as done.
+ */
 public class MarkCommand extends TaskCommand {
+
+    /**
+     * Creates mark command.
+     *
+     * @param ui User interface to print messages in
+     * @param taskList Todo list to modify
+     */
     public MarkCommand(UserInterface ui, TaskList taskList) {
         super("mark", ui, taskList);
     }

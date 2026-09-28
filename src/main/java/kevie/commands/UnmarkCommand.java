@@ -6,7 +6,17 @@ import kevie.exceptions.*;
 import kevie.tasks.Task;
 import kevie.tasks.TaskList;
 
+/**
+ * Command that set a task in the todo list as not done.
+ */
 public class UnmarkCommand extends TaskCommand {
+
+    /**
+     * Creates unmark command.
+     *
+     * @param ui User interface to print messages in
+     * @param taskList Todo list to modify
+     */
     public UnmarkCommand(UserInterface ui, TaskList taskList) {
         super("unmark", ui, taskList);
     }

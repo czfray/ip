@@ -8,8 +8,17 @@ import kevie.tasks.TaskList;
 
 import java.util.ArrayList;
 
+/**
+ * Command that find all tasks with a specified keyword in the todo list.
+ */
 public class FindCommand extends TaskCommand{
 
+    /**
+     * Creates find command.
+     *
+     * @param ui User interface to print messages in
+     * @param taskList Todo list to access
+     */
     public FindCommand(UserInterface ui, TaskList taskList) {
         super("find", ui, taskList);
     }
