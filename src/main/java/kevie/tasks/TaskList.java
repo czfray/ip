@@ -61,6 +61,16 @@ public class TaskList {
         }
     }
 
+    public ArrayList<Integer> keywordFindTasks(String keyword){
+        ArrayList<Integer> result = new ArrayList<Integer>();
+        for (int i = 0; i < getLength(); i++){
+            if (tasks.get(i).getName().toLowerCase().contains(keyword.toLowerCase())){
+                result.add(i);
+            }
+        }
+        return result;
+    }
+
     public void save(){
         try{
 

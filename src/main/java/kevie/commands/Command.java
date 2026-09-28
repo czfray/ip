@@ -8,7 +8,7 @@ public abstract class Command {
     private static Command[] commands = new Command[MAX_COMMAND_NO];
     private static int commands_length = 0;
 
-    public static boolean scan(String input){
+    public static boolean parse(String input){
         String[] inputArgs = input.trim().split(" ", 2);
         for (int i = 0; i < commands_length; i++){
             if (inputArgs[0].toLowerCase().equals(commands[i].getId())){
