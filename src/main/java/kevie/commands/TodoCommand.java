@@ -1,6 +1,8 @@
 package kevie.commands;
 
 import kevie.Kevie;
+import kevie.exceptions.CmdSynNoArgException;
+import kevie.exceptions.CmdSyntaxException;
 import kevie.tasks.TaskList;
 import kevie.tasks.Todo;
 
@@ -10,11 +12,9 @@ public class TodoCommand extends Command {
     }
 
     @Override
-    public boolean execute(String arg) {
+    public boolean execute(String arg) throws CmdSyntaxException {
         if (arg == null){
-            Kevie.speak("You need to tell me the name of your todo task!");
-            help();
-            return false;
+            throw new CmdSynNoArgException(this);
         }
         Todo newTodo = new Todo(arg);
         TaskList.instance.addTask(newTodo);
@@ -27,7 +27,7 @@ public class TodoCommand extends Command {
 
     @Override
     public String syntax() {
-        return "todo [Name]";
+        return "todo [Description]";
     }
 
     @Override

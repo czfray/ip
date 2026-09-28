@@ -1,6 +1,8 @@
 package kevie.commands;
 
 import kevie.Kevie;
+import kevie.exceptions.CmdSynNoArgException;
+import kevie.exceptions.CmdSyntaxException;
 import kevie.tasks.Event;
 import kevie.tasks.TaskList;
 
@@ -10,11 +12,9 @@ public class EventCommand extends Command {
     }
 
     @Override
-    public boolean execute(String arg) {
+    public boolean execute(String arg) throws CmdSyntaxException {
         if (arg == null){
-            Kevie.speak("Specify a name and descriptions of your event to me!");
-            help();
-            return false;
+            throw new CmdSynNoArgException(this);
         }
 
         String description;
@@ -26,17 +26,13 @@ public class EventCommand extends Command {
             description = eventArgs[0];
             eventArgs = eventArgs[1].split(" /to ");
         } catch (Exception e) {
-            Kevie.speak("Please make sure to indicate name, start time and end time of the event.");
-            help();
-            return false;
+            throw new CmdSyntaxException("Event description, start time or end time not indicated", this);
         }
 
         try {
             newEvent = new Event(description, eventArgs[0], eventArgs[1]);
         } catch (Exception e) {
-            Kevie.speak("Syntax is bad! You have to tell me when the event ends!");
-            help();
-            return false;
+            throw new CmdSyntaxException("Event end time not given", this);
         }
 
         TaskList.instance.addTask(newEvent);
@@ -49,7 +45,7 @@ public class EventCommand extends Command {
 
     @Override
     public String syntax() {
-        return "event [Name] /from [Start Time] /to [End Time]";
+        return "event [Description] /from [Start Time] /to [End Time]";
     }
 
     @Override

@@ -1,6 +1,7 @@
 package kevie.commands;
 
 import kevie.Kevie;
+import kevie.exceptions.*;
 import kevie.tasks.Task;
 import kevie.tasks.TaskList;
 
@@ -10,34 +11,28 @@ public class UnmarkCommand extends Command {
     }
 
     @Override
-    public boolean execute(String arg) {
+    public boolean execute(String arg) throws CmdSyntaxException, TaskNoException {
+        if (arg == null){
+            throw new CmdSynNoArgException(this);
+        }
+
         int unmarkNo = -1;
 
         try {
             unmarkNo = Integer.parseInt(arg);
-        }
-        catch(NumberFormatException e) {
-            Kevie.speak("I cannot unmark anything if you dont give me a number lol.");
-            help();
-            return false;
+        } catch(NumberFormatException e) {
+            throw new TaskNoParseException();
         }
 
-        if (unmarkNo > TaskList.instance.getLength())
-        {
-            Kevie.speak("There are only " + TaskList.instance.getLength() + " tasks, yet you want to unmark task "
-                    + unmarkNo + "? Try again bro.");
-            Kevie.speak("To see which number correspond to your task, do \"list\".", true);
-            return false;
+        if (unmarkNo > TaskList.instance.getLength()) {
+            throw new TaskNoExceedException(unmarkNo, TaskList.instance.getLength());
+        } else if (unmarkNo < 1) {
+            throw new TaskNoNonPosException();
         }
-        else if (unmarkNo < 1)
-        {
-            Kevie.speak("Your task number to be undone must be positive ahh!!!");
-            Kevie.speak("To see which number correspond to your task, do \"list\".", true);
-            return false;
-        }
+
         Task unmarkedTask = TaskList.instance.getTask(unmarkNo - 1);
         if (!unmarkedTask.isDone()){
-            Kevie.speak("Task " + (unmarkNo) + " is marked as not done already.");
+            Kevie.speak("Task " + (unmarkNo) + " is marked as not done already:");
             Kevie.speak(unmarkedTask.toString(), true);
             return false;
         }
@@ -49,7 +44,7 @@ public class UnmarkCommand extends Command {
     }
 
     @Override
-    protected void help() {
+    public void help() {
         super.help();
         Kevie.speak("To see which number correspond to your task, do \"list\".", true);
     }

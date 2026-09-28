@@ -1,6 +1,8 @@
 package kevie.commands;
 
 import kevie.Kevie;
+import kevie.exceptions.CmdSynNoArgException;
+import kevie.exceptions.CmdSyntaxException;
 import kevie.tasks.TaskList;
 
 import java.util.ArrayList;
@@ -12,11 +14,9 @@ public class FindCommand extends Command{
     }
 
     @Override
-    public boolean execute(String arg) {
+    public boolean execute(String arg) throws CmdSyntaxException {
         if (arg == null){
-            Kevie.speak("Specify me a keyword for me to find! ");
-            help();
-            return false;
+            throw new CmdSynNoArgException(this);
         }
 
         ArrayList<Integer> taskIndexes = TaskList.instance.keywordFindTasks(arg.trim());
@@ -35,7 +35,7 @@ public class FindCommand extends Command{
 
     @Override
     public String syntax() {
-        return "find [String]";
+        return "find [Keyword]";
     }
 
     @Override

@@ -1,6 +1,7 @@
 package kevie.commands;
 
 import kevie.Kevie;
+import kevie.exceptions.*;
 
 public abstract class Command {
 
@@ -8,7 +9,7 @@ public abstract class Command {
     private static Command[] commands = new Command[MAX_COMMAND_NO];
     private static int commands_length = 0;
 
-    public static boolean parse(String input){
+    public static boolean parse(String input) throws KevieException {
         String[] inputArgs = input.trim().split(" ", 2);
         for (int i = 0; i < commands_length; i++){
             if (inputArgs[0].toLowerCase().equals(commands[i].getId())){
@@ -16,9 +17,7 @@ public abstract class Command {
                 return commands[i].execute(cmdInputArg);
             }
         }
-        Kevie.speak("I don't understand what you mean by \"" + inputArgs[0] + "\".");
-        Kevie.speak("Say \"help\" if you need a list of commands.", true);
-        return false;
+        throw new CmdNoExistException(inputArgs[0].toLowerCase());
     }
 
     public static void listCommands(){
@@ -35,11 +34,11 @@ public abstract class Command {
         commands_length++;
     }
 
-    public abstract boolean execute(String arg);
+    public abstract boolean execute(String arg) throws KevieException;
     public abstract String syntax();
     public abstract String example();
 
-    protected void help() {
+    public void help() {
         Kevie.speak("Correct syntax should be: \"" + syntax() + "\".", true);
         Kevie.speak("For example: \"" + example() + "\".", true);
     }

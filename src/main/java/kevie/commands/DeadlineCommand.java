@@ -1,6 +1,8 @@
 package kevie.commands;
 
 import kevie.Kevie;
+import kevie.exceptions.CmdSynNoArgException;
+import kevie.exceptions.CmdSyntaxException;
 import kevie.tasks.Deadline;
 import kevie.tasks.TaskList;
 
@@ -10,26 +12,19 @@ public class DeadlineCommand extends Command {
     }
 
     @Override
-    public boolean execute(String arg) {
+    public boolean execute(String arg) throws CmdSyntaxException {
         if (arg == null){
-            Kevie.speak("Specify a name and details for your deadline to me!");
-            help();
-            return false;
+            throw new CmdSynNoArgException(this);
         }
 
         int index = arg.indexOf("/by");
         if (index != -1 && arg.substring(0, index).trim().isEmpty()) {
-            Kevie.speak("What is the name of your deadline? You have to tell me!");
-            help();
-            return false;
+            throw new CmdSyntaxException("Deadline description not given", this);
         }
 
         String[] deadlineArgs = arg.split(" /by ");
         if (deadlineArgs.length < 2){
-
-            Kevie.speak("Syntax is bad! You have not specified a due time for your deadline.");
-            help();
-            return false;
+            throw new CmdSyntaxException("Deadline due time not given", this);
         }
 
         Deadline newDeadline = new Deadline(deadlineArgs[0], deadlineArgs[1]);
@@ -43,7 +38,7 @@ public class DeadlineCommand extends Command {
 
     @Override
     public String syntax() {
-        return "deadline [Name] /by [Due Time]";
+        return "deadline [Description] /by [Due Time]";
     }
 
     @Override

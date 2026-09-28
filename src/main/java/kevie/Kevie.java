@@ -1,6 +1,8 @@
 package kevie;
 
 import kevie.commands.*;
+import kevie.exceptions.FileCorruptionException;
+import kevie.exceptions.KevieException;
 import kevie.tasks.TaskList;
 
 import java.util.Scanner;
@@ -51,14 +53,25 @@ public class Kevie {
 
         System.out.println(BANNER);
         speak("Hey, what's up!");
-        TaskList.instance = TaskList.load(SAVE_PATH);
+
+        try{
+            TaskList.instance = TaskList.load(SAVE_PATH);
+        } catch (FileCorruptionException e){
+            TaskList.instance = new TaskList(SAVE_PATH);
+            e.printMessage();
+        }
+
         speak("Anything you want to get done today?");
 
         while(true)
         {
             System.out.print(PREFIX_USER + " ");
             String input = scanner.nextLine();
-            if (Command.parse(input)) break;
+            try{
+                if (Command.parse(input)) break;
+            } catch (KevieException e){
+                e.printMessage();
+            }
         }
     }
 }

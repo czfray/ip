@@ -1,7 +1,8 @@
 package kevie.tasks;
 
 import kevie.Kevie;
-import kevie.exceptions.TaskIncoRawFormatException;
+import kevie.exceptions.FileBadRawException;
+import kevie.exceptions.FileCorruptionException;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -13,14 +14,13 @@ import java.util.ArrayList;
 
 public class TaskList {
 
-    private static final int LIST_MAX_LEN = 100;
     public static TaskList instance;
 
 
     private ArrayList<Task> tasks;
     private String save_path;
 
-    public TaskList(int maxLength, String save_path){
+    public TaskList(String save_path){
         tasks = new ArrayList<Task>();
         this.save_path = save_path;
     }
@@ -30,7 +30,6 @@ public class TaskList {
         if (newTask == null){
             return;
         }
-
         tasks.add(newTask);
     }
 
@@ -87,15 +86,15 @@ public class TaskList {
         }
     }
 
-    public static TaskList load(String path){
-        TaskList tasks = new TaskList(100, path);
+    public static TaskList load(String path) throws FileCorruptionException {
+        TaskList tasks = new TaskList(path);
         int lineNo = 0;
-        try {
+
+        try{
             File file = new File(path);
             file.getParentFile().mkdirs();
             file.createNewFile();
             Scanner scanner = new Scanner(file);
-
             while (scanner.hasNextLine()) {
 
                 try{
@@ -103,28 +102,29 @@ public class TaskList {
                     lineNo++;
                     switch (rawArgs[0]){
                         case "T":
-                            tasks.addTask(new Todo(rawArgs));
+                            tasks.addTask(new Todo(rawArgs, lineNo));
                             break;
                         case "D":
-                            tasks.addTask(new Deadline(rawArgs));
+                            tasks.addTask(new Deadline(rawArgs, lineNo));
                             break;
                         case "E":
-                            tasks.addTask(new Event(rawArgs));
+                            tasks.addTask(new Event(rawArgs, lineNo));
                             break;
                         default:
-                            throw new TaskIncoRawFormatException();
+                            throw new FileBadRawException(lineNo);
                     }
-                } catch (TaskIncoRawFormatException e) {
-                    Kevie.speak("I cannot load a task because line " + lineNo + " of save file is corrupted.");
-                    Kevie.speak("I will delete the corrupted line as a result.", true);
                 }
-
+                catch (FileBadRawException e){
+                    e.printMessage();
+                }
             }
             scanner.close();
-            tasks.save();
-        } catch (IOException e) {
-            Kevie.speak("I cannot load the tasks from save file because there is an IO error.");
+
+        } catch (IOException e){
+            throw new FileCorruptionException("Cannot open file.");
         }
+
+        tasks.save();
         return tasks;
     }
 }
