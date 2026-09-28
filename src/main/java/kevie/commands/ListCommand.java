@@ -1,25 +1,26 @@
 package kevie.commands;
 
 import kevie.Kevie;
+import kevie.UserInterface;
 import kevie.tasks.TaskList;
 
-public class ListCommand extends Command {
+public class ListCommand extends TaskCommand {
 
 
-    public ListCommand() {
-        super("list");
+    public ListCommand(UserInterface ui, TaskList taskList) {
+        super("list", ui, taskList);
     }
 
     @Override
     public boolean execute(String arg) {
-        if (TaskList.instance.getLength() < 1) {
-            Kevie.speak("There ain't anything in your list yet.");
-            Kevie.speak("To add new tasks, do \"todo\", \"deadline\", or \"event\".", true);
+        if (taskList.getLength() < 1) {
+            ui.botSpeak("There ain't anything in your list yet.");
+            ui.botSpeak("To add new tasks, do \"todo\", \"deadline\", or \"event\".", true);
             return false;
         }
 
-        Kevie.speak("Ok my guy, here is your list:");
-        TaskList.instance.printAll();
+        ui.botSpeak("Ok my guy, here is your list:");
+        taskList.printAll(ui);
         return false;
     }
 

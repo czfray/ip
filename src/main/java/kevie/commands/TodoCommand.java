@@ -1,33 +1,34 @@
 package kevie.commands;
 
 import kevie.Kevie;
+import kevie.UserInterface;
+import kevie.exceptions.CmdSynNoArgException;
+import kevie.exceptions.CmdSyntaxException;
 import kevie.tasks.TaskList;
 import kevie.tasks.Todo;
 
-public class TodoCommand extends Command {
-    public TodoCommand() {
-        super("todo");
+public class TodoCommand extends TaskCommand {
+    public TodoCommand(UserInterface ui, TaskList taskList) {
+        super("todo", ui, taskList);
     }
 
     @Override
-    public boolean execute(String arg) {
+    public boolean execute(String arg) throws CmdSyntaxException {
         if (arg == null){
-            Kevie.speak("You need to tell me the name of your todo task!");
-            help();
-            return false;
+            throw new CmdSynNoArgException(this, ui);
         }
         Todo newTodo = new Todo(arg);
-        TaskList.instance.addTask(newTodo);
-        TaskList.instance.save();
-        Kevie.speak("Alright I added new todo to the list: ");
-        Kevie.speak(newTodo.toString(), true);
-        Kevie.speak("You now have " + TaskList.instance.getLength() + " tasks.", true);
+        taskList.addTask(newTodo);
+        taskList.save(ui);
+        ui.botSpeak("Alright I added new todo to the list: ");
+        ui.botSpeak(newTodo.toString(), true);
+        ui.botSpeak("You now have " + taskList.getLength() + " tasks.", true);
         return false;
     }
 
     @Override
     public String syntax() {
-        return "todo [Name]";
+        return "todo [Description]";
     }
 
     @Override

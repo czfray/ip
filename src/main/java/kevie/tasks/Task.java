@@ -1,7 +1,7 @@
 package kevie.tasks;
 
-import kevie.Kevie;
-import kevie.exceptions.TaskIncoRawFormatException;
+import kevie.UserInterface;
+import kevie.exceptions.FileBadRawException;
 
 public class Task {
 
@@ -18,12 +18,12 @@ public class Task {
         this.isDone = false;
     }
 
-    public Task(String[] rawArgs) throws TaskIncoRawFormatException {
+    public Task(String[] rawArgs, int lineNo, UserInterface ui) throws FileBadRawException {
         try{
             this.name = rawArgs[1];
             this.isDone = Boolean.parseBoolean(rawArgs[2]);
         } catch (Exception e) {
-            throw new TaskIncoRawFormatException();
+            throw new FileBadRawException(lineNo, ui);
         }
     }
 
@@ -45,7 +45,7 @@ public class Task {
 
     @Override
     public String toString() {
-        return "[" + getType() + "] " +  (isDone? DONE_CHAR: NOT_DONE_CHAR) + " " + name;
+        return  (isDone? DONE_CHAR: NOT_DONE_CHAR) + " [" + getType() + "]" + " " + name;
     }
 
     public String getRaw(){

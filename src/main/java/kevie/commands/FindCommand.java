@@ -1,41 +1,42 @@
 package kevie.commands;
 
 import kevie.Kevie;
+import kevie.UserInterface;
+import kevie.exceptions.CmdSynNoArgException;
+import kevie.exceptions.CmdSyntaxException;
 import kevie.tasks.TaskList;
 
 import java.util.ArrayList;
 
-public class FindCommand extends Command{
+public class FindCommand extends TaskCommand{
 
-    public FindCommand() {
-        super("find");
+    public FindCommand(UserInterface ui, TaskList taskList) {
+        super("find", ui, taskList);
     }
 
     @Override
-    public boolean execute(String arg) {
+    public boolean execute(String arg) throws CmdSyntaxException {
         if (arg == null){
-            Kevie.speak("Specify me a keyword for me to find! ");
-            help();
-            return false;
+            throw new CmdSynNoArgException(this, ui);
         }
 
-        ArrayList<Integer> taskIndexes = TaskList.instance.keywordFindTasks(arg.trim());
+        ArrayList<Integer> taskIndexes = taskList.keywordFindTasks(arg.trim());
 
         if (taskIndexes.size() <= 0){
-            Kevie.speak("There are no task with keyword \"" + arg.trim() + "\" in your list.");
+            ui.botSpeak("There are no task with keyword \"" + arg.trim() + "\" in your list.");
             return false;
         }
 
-        Kevie.speak("Here are the tasks with the keyword \"" + arg.trim() + "\" in your list: ");
+        ui.botSpeak("Here are the tasks with the keyword \"" + arg.trim() + "\" in your list: ");
         for (int i : taskIndexes){
-            Kevie.speak((i + 1) + ". " + TaskList.instance.getTask(i).toString(), true);
+            ui.botSpeak((i + 1) + ". " + taskList.getTask(i).toString(), true);
         }
         return false;
     }
 
     @Override
     public String syntax() {
-        return "find [String]";
+        return "find [Keyword]";
     }
 
     @Override

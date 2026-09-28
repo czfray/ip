@@ -1,6 +1,7 @@
 package kevie.tasks;
 
-import kevie.exceptions.TaskIncoRawFormatException;
+import kevie.UserInterface;
+import kevie.exceptions.FileBadRawException;
 
 public class Todo extends Task{
 
@@ -8,8 +9,8 @@ public class Todo extends Task{
         super(name);
     }
 
-    public Todo(String[] rawArgs) throws TaskIncoRawFormatException {
-        super(rawArgs);
+    public Todo(String[] rawArgs, int lineNo, UserInterface ui) throws FileBadRawException {
+        super(rawArgs, lineNo, ui);
     }
 
     @Override

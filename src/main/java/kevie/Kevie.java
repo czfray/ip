@@ -1,64 +1,64 @@
 package kevie;
 
 import kevie.commands.*;
+import kevie.exceptions.FileCorruptionException;
+import kevie.exceptions.KevieException;
 import kevie.tasks.TaskList;
 
 import java.util.Scanner;
 
 public class Kevie {
-
-    private static final String BANNER = """
-                ====================================
-                ██╗  ██╗███████╗██╗   ██╗██╗███████╗
-                ██║ ██╔╝██╔════╝██║   ██║██║██╔════╝
-                █████╔╝ █████╗  ██║   ██║██║█████╗
-                ██╔═██╗ ██╔══╝  ╚██╗ ██╔╝██║██╔══╝
-                ██║  ██╗███████╗ ╚████╔╝ ██║███████╗
-                ╚═╝  ╚═╝╚══════╝  ╚═══╝  ╚═╝╚══════╝
-                ====================================""";
-
-    private static final String PREFIX_BOT = "[Kevie]";
-    private static final String PREFIX_USER = "[You]";
-    private static final String PREFIX_INDENT = "        ";
-    private static final String SAVE_PATH = "saves/tasks.kv";
-
-    public static void speak(String msg, boolean indentOnly) {
-        if (!indentOnly) System.out.println(PREFIX_BOT + " " + msg);
-        else System.out.println(PREFIX_INDENT + msg);
-    }
-
-    public static void speak(String msg) {
-        speak(msg, false);
-    }
-
-    private static void initCommands() {
-        new ByeCommand();
-        new HelpCommand();
-        new ListCommand();
-        new TodoCommand();
-        new DeadlineCommand();
-        new EventCommand();
-        new MarkCommand();
-        new UnmarkCommand();
-        new DeleteCommand();
-        new FindCommand();
-    }
+    private UserInterface ui;
+    private TaskList taskList;
+    private Parser parser;
 
     public static void main(String[] args) {
+        new Kevie().run();
+    }
 
+    public Kevie(){
+        ui = new UserInterface();
+        ui.printBanner();
+        ui.botSpeak("Hey, what's up!");
+
+        try{
+            this.taskList = TaskList.load(ui);
+        } catch (FileCorruptionException e){
+            taskList = new TaskList();
+            e.printMessage();
+        }
+
+        registerCommands();
+        ui.botSpeak("Anything you want to get done today?");
+    }
+
+    private void registerCommands(){
+        parser = new Parser(ui, taskList);
+        parser.register(new ByeCommand(ui));
+        parser.register(new HelpCommand(ui, parser));
+        parser.register(new ListCommand(ui, taskList));
+        parser.register(new TodoCommand(ui, taskList));
+        parser.register(new DeadlineCommand(ui, taskList));
+        parser.register(new EventCommand(ui, taskList));
+        parser.register(new MarkCommand(ui, taskList));
+        parser.register(new UnmarkCommand(ui, taskList));
+        parser.register(new DeleteCommand(ui, taskList));
+        parser.register(new FindCommand(ui, taskList));
+    }
+
+    public void run(){
         Scanner scanner = new Scanner(System.in);
-        initCommands();
-
-        System.out.println(BANNER);
-        speak("Hey, what's up!");
-        TaskList.instance = TaskList.load(SAVE_PATH);
-        speak("Anything you want to get done today?");
-
         while(true)
         {
-            System.out.print(PREFIX_USER + " ");
+            ui.userPrompt();
             String input = scanner.nextLine();
-            if (Command.parse(input)) break;
+            try{
+                if (parser.parseAndExecute(input)){
+                    break;
+                }
+            } catch (KevieException e){
+                e.printMessage();
+            }
         }
     }
 }

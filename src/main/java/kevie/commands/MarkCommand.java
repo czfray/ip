@@ -1,58 +1,53 @@
 package kevie.commands;
 
 import kevie.Kevie;
+import kevie.UserInterface;
+import kevie.exceptions.*;
 import kevie.tasks.Task;
 import kevie.tasks.TaskList;
 
-public class MarkCommand extends Command {
-    public MarkCommand() {
-        super("mark");
+public class MarkCommand extends TaskCommand {
+    public MarkCommand(UserInterface ui, TaskList taskList) {
+        super("mark", ui, taskList);
     }
 
     @Override
-    public boolean execute(String arg) {
+    public boolean execute(String arg) throws CmdSyntaxException, TaskNoException {
+        if (arg == null){
+            throw new CmdSynNoArgException(this, ui);
+        }
+
         int markNo = -1;
 
         try {
             markNo = Integer.parseInt(arg);
-
         } catch (Exception e) {
-            Kevie.speak("I cannot mark anything if you dont give me a number lol.");
-            help();
-            return false;
+            throw new TaskNoParseException(ui);
         }
 
-        if (markNo > TaskList.instance.getLength())
-        {
-            Kevie.speak("There are only " + TaskList.instance.getLength() + " tasks, yet you want to mark task "
-                    + markNo + " as done? Try again bro.");
-            Kevie.speak("To see which number correspond to your task, do \"list\".", true);
-            return false;
-        }
-        else if (markNo < 1)
-        {
-            Kevie.speak("Your task number to be marked done must be positive ahh!!!");
-            Kevie.speak("To see which number correspond to your task, do \"list\".", true);
-            return false;
+        if (markNo > taskList.getLength()) {
+            throw new TaskNoExceedException(markNo, taskList.getLength(), ui);
+        } else if (markNo < 1) {
+            throw new TaskNoNonPosException(ui);
         }
 
-        Task markedTask = TaskList.instance.getTask(markNo - 1);
+        Task markedTask = taskList.getTask(markNo - 1);
         if (markedTask.isDone()){
-            Kevie.speak("Task " + (markNo) + " is marked as done already.");
-            Kevie.speak(markedTask.toString(), true);
+            ui.botSpeak("Task " + (markNo) + " is marked as done already:");
+            ui.botSpeak(markedTask.toString(), true);
             return false;
         }
         markedTask.setDone(true);
-        TaskList.instance.save();
-        Kevie.speak("Ok! I have marked a task as done: ");
-        Kevie.speak(markedTask.toString(), true);
+        taskList.save(ui);
+        ui.botSpeak("Ok! I have marked a task as done: ");
+        ui.botSpeak(markedTask.toString(), true);
         return false;
     }
 
     @Override
-    protected void help() {
+    public void help() {
         super.help();
-        Kevie.speak("To see which number correspond to your task, do \"list\".", true);
+        ui.botSpeak("To see which number correspond to your task, do \"list\".", true);
     }
 
     @Override

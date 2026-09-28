@@ -1,54 +1,49 @@
 package kevie.commands;
 
 import kevie.Kevie;
+import kevie.UserInterface;
+import kevie.exceptions.*;
 import kevie.tasks.Task;
 import kevie.tasks.TaskList;
 
-public class DeleteCommand extends Command {
-    public DeleteCommand() {
-        super("delete");
+public class DeleteCommand extends TaskCommand {
+    public DeleteCommand(UserInterface ui, TaskList taskList) {
+        super("delete", ui, taskList);
     }
 
     @Override
-    public boolean execute(String arg) {
+    public boolean execute(String arg) throws CmdSyntaxException, TaskNoException {
+        if (arg == null){
+            throw new CmdSynNoArgException(this, ui);
+        }
+
         int deleteNo = -1;
 
         try {
             deleteNo = Integer.parseInt(arg);
-
         } catch (Exception e) {
-            Kevie.speak("Give me the NUMBER of the task you want me to delete!");
-            help();
-            return false;
+            throw new TaskNoParseException(ui);
         }
 
-        if (deleteNo > TaskList.instance.getLength())
-        {
-            Kevie.speak("There are only " + TaskList.instance.getLength() + " tasks, yet you want to delete task "
-                    + deleteNo + "? Try again.");
-            Kevie.speak("To see which number correspond to your task, do \"list\".", true);
-            return false;
-        }
-        else if (deleteNo < 1)
-        {
-            Kevie.speak("Your task number to be deleted must be positive!!!");
-            Kevie.speak("To see which number correspond to your task, do \"list\".", true);
-            return false;
+        if (deleteNo > taskList.getLength()) {
+            throw new TaskNoExceedException(deleteNo, taskList.getLength(), ui);
+        } else if (deleteNo < 1) {
+            throw new TaskNoNonPosException(ui);
         }
 
-        Task deleteTask = TaskList.instance.getTask(deleteNo - 1);
-        TaskList.instance.deleteTask(deleteNo - 1);
-        TaskList.instance.save();
-        Kevie.speak("Can! I have deleted the following task: ");
-        Kevie.speak(deleteTask.toString(), true);
-        Kevie.speak("You now have " + TaskList.instance.getLength() + " tasks.", true);
+        Task deleteTask = taskList.getTask(deleteNo - 1);
+        taskList.deleteTask(deleteNo - 1);
+        taskList.save(ui);
+        ui.botSpeak("Can! I have deleted the following task: ");
+        ui.botSpeak(deleteTask.toString(), true);
+        ui.botSpeak("You now have " + taskList.getLength() + " tasks.", true);
         return false;
     }
 
     @Override
-    protected void help() {
+    public void help() {
         super.help();
-        Kevie.speak("To see which number correspond to your task, do \"list\".", true);
+        ui.botSpeak("To see which number correspond to your task, do \"list\".", true);
     }
 
     @Override

@@ -1,54 +1,54 @@
 package kevie.commands;
 
 import kevie.Kevie;
+import kevie.UserInterface;
+import kevie.exceptions.CmdSynNoArgException;
+import kevie.exceptions.CmdSyntaxException;
 import kevie.tasks.Deadline;
+import kevie.tasks.Task;
 import kevie.tasks.TaskList;
 
-public class DeadlineCommand extends Command {
-    public DeadlineCommand() {
-        super("deadline");
+public class DeadlineCommand extends TaskCommand {
+
+    private final String dueSeperator = "/by";
+
+    public DeadlineCommand(UserInterface ui, TaskList taskList) {
+        super("deadline", ui, taskList);
     }
 
     @Override
-    public boolean execute(String arg) {
+    public boolean execute(String arg) throws CmdSyntaxException {
         if (arg == null){
-            Kevie.speak("Specify a name and details for your deadline to me!");
-            help();
-            return false;
+            throw new CmdSynNoArgException(this, ui);
         }
 
-        int index = arg.indexOf("/by");
+        int index = arg.indexOf(dueSeperator);
         if (index != -1 && arg.substring(0, index).trim().isEmpty()) {
-            Kevie.speak("What is the name of your deadline? You have to tell me!");
-            help();
-            return false;
+            throw new CmdSyntaxException("Deadline description not given", this, ui);
         }
 
-        String[] deadlineArgs = arg.split(" /by ");
+        String[] deadlineArgs = arg.split(" " + dueSeperator + " ");
         if (deadlineArgs.length < 2){
-
-            Kevie.speak("Syntax is bad! You have not specified a due time for your deadline.");
-            help();
-            return false;
+            throw new CmdSyntaxException("Deadline due time not given", this, ui);
         }
 
         Deadline newDeadline = new Deadline(deadlineArgs[0], deadlineArgs[1]);
-        TaskList.instance.addTask(newDeadline);
-        TaskList.instance.save();
-        Kevie.speak("Okay I added new deadline to the list: ");
-        Kevie.speak(newDeadline.toString(), true);
-        Kevie.speak("You now have " + TaskList.instance.getLength() + " tasks.", true);
+        taskList.addTask(newDeadline);
+        taskList.save(ui);
+        ui.botSpeak("Okay I added new deadline to the list: ");
+        ui.botSpeak(newDeadline.toString(), true);
+        ui.botSpeak("You now have " + taskList.getLength() + " tasks.", true);
         return false;
     }
 
     @Override
     public String syntax() {
-        return "deadline [Name] /by [Due Time]";
+        return "deadline [Description] " + dueSeperator + " [Due Time]";
     }
 
     @Override
     public String example() {
-        return "deadline CS2113 individual project /by 5th Sep 2359";
+        return "deadline CS2113 individual project " + dueSeperator + " 5th Sep 2359";
     }
 
 }

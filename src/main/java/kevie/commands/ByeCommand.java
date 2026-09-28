@@ -1,15 +1,17 @@
 package kevie.commands;
 
 import kevie.Kevie;
+import kevie.UserInterface;
+import kevie.tasks.TaskList;
 
 public class ByeCommand extends Command {
-    public ByeCommand() {
-        super("bye");
+    public ByeCommand(UserInterface ui) {
+        super("bye", ui);
     }
 
     @Override
     public boolean execute(String arg) {
-        Kevie.speak("Bye bye! See you later!");
+        ui.botSpeak("Bye bye! See you later!");
         return true;
     }
 
