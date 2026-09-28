@@ -1,6 +1,5 @@
 package kevie.tasks;
 
-import kevie.Kevie;
 import kevie.UserInterface;
 import kevie.exceptions.FileBadRawException;
 import kevie.exceptions.FileCorruptionException;
@@ -13,15 +12,26 @@ import java.util.regex.Pattern;
 
 import java.util.ArrayList;
 
+/**
+ * Represents a todo list consisting of a lot of tasks.
+ */
 public class TaskList {
     private static String SAVE_PATH = "saves/tasks.kv";
 
     private ArrayList<Task> tasks;
 
+    /**
+     * Creates a todo list.
+     */
     public TaskList(){
         tasks = new ArrayList<Task>();
     }
 
+    /**
+     * Add a task into the todo list.
+     *
+     * @param newTask The task to add.
+     */
     public void addTask(Task newTask){
 
         if (newTask == null){
@@ -30,6 +40,11 @@ public class TaskList {
         tasks.add(newTask);
     }
 
+    /**
+     * Delete task with index from the todo list.
+     *
+     * @param index Index of task to delete (Task index = Task number in <code>TaskList.printAll()</code> - 1)
+     */
     public void deleteTask(int index){
 
         if (index >= tasks.size() || index < 0) {
@@ -38,7 +53,12 @@ public class TaskList {
         tasks.remove(index);
     }
 
-    //The index here starts at 0 btw
+    /**
+     * Get task with index from the todo list.
+     *
+     * @param index Index of task to get (Task index = Task number in <code>TaskList.printAll()</code> - 1)
+     * @return Task with task index indicated. Null if the task index is invalid.
+     */
     public Task getTask(int index){
 
         if (index >= tasks.size() || index < 0) {
@@ -47,26 +67,47 @@ public class TaskList {
         return tasks.get(index);
     }
 
+    /**
+     * Get the number of tasks in the todo list.
+     *
+     * @return The number of tasks in the todo list.
+     */
     public int getLength() {
         return tasks.size();
     }
 
+    /**
+     * Prints out the entire todo list.
+     *
+     * @param ui User interface to print the list in.
+     */
     public void printAll(UserInterface ui){
         for (int i = 0; i < getLength(); i++) {
             ui.botSpeak((i + 1) + ". " + tasks.get(i).toString(), true);
         }
     }
 
+    /**
+     * Gets all indexes of tasks in the todo list with a certain keyword.
+     *
+     * @param keyword Keyword to find
+     * @return List of integer indexes of tasks with the keyword.
+     */
     public ArrayList<Integer> keywordFindTasks(String keyword){
         ArrayList<Integer> result = new ArrayList<Integer>();
         for (int i = 0; i < getLength(); i++){
-            if (tasks.get(i).getName().toLowerCase().contains(keyword.toLowerCase())){
+            if (tasks.get(i).getDescription().toLowerCase().contains(keyword.toLowerCase())){
                 result.add(i);
             }
         }
         return result;
     }
 
+    /**
+     * Save the todo list in a save file.
+     *
+     * @param ui User interface to print exceptions in.
+     */
     public void save(UserInterface ui){
         try{
 
@@ -83,6 +124,13 @@ public class TaskList {
         }
     }
 
+    /**
+     * Loads todo list from a save file.
+     *
+     * @param ui User interface to print exceptions in.
+     * @return The todo list loaded from save file.
+     * @throws FileCorruptionException If there is an IO error occurred.
+     */
     public static TaskList load(UserInterface ui) throws FileCorruptionException {
         TaskList tasks = new TaskList();
         int lineNo = 0;

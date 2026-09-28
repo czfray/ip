@@ -7,15 +7,26 @@ import kevie.tasks.TaskList;
 
 import java.util.Scanner;
 
+/**
+ * Represents the Kevie bot.
+ */
 public class Kevie {
     private UserInterface ui;
     private TaskList taskList;
     private Parser parser;
 
+    /**
+     * Runs Kevie
+     *
+     * @param args Terminal arguments
+     */
     public static void main(String[] args) {
         new Kevie().run();
     }
 
+    /*
+     * Creates an instance of Kevie.
+     */
     public Kevie(){
         ui = new UserInterface();
         ui.printBanner();
@@ -33,7 +44,7 @@ public class Kevie {
     }
 
     private void registerCommands(){
-        parser = new Parser(ui, taskList);
+        parser = new Parser(ui);
         parser.register(new ByeCommand(ui));
         parser.register(new HelpCommand(ui, parser));
         parser.register(new ListCommand(ui, taskList));
@@ -46,7 +57,7 @@ public class Kevie {
         parser.register(new FindCommand(ui, taskList));
     }
 
-    public void run(){
+    private void run(){
         Scanner scanner = new Scanner(System.in);
         while(true)
         {

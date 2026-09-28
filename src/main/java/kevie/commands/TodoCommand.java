@@ -7,7 +7,17 @@ import kevie.exceptions.CmdSyntaxException;
 import kevie.tasks.TaskList;
 import kevie.tasks.Todo;
 
+/**
+ * Command that creates a simple todo task in the todo list.
+ */
 public class TodoCommand extends TaskCommand {
+
+    /**
+     * Creates todo command.
+     *
+     * @param ui User interface to print messages in
+     * @param taskList Todo list to modify
+     */
     public TodoCommand(UserInterface ui, TaskList taskList) {
         super("todo", ui, taskList);
     }

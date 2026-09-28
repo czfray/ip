@@ -4,7 +4,16 @@ import kevie.Kevie;
 import kevie.UserInterface;
 import kevie.tasks.TaskList;
 
+/**
+ * Command that terminates Kevie.
+ */
 public class ByeCommand extends Command {
+
+    /**
+     * Creates the bye command.
+     *
+     * @param ui User interface to print messages in.
+     */
     public ByeCommand(UserInterface ui) {
         super("bye", ui);
     }
