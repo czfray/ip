@@ -1,20 +1,26 @@
 package kevie.commands;
 
 import kevie.Kevie;
+import kevie.UserInterface;
 import kevie.exceptions.CmdSynNoArgException;
 import kevie.exceptions.CmdSyntaxException;
 import kevie.tasks.Event;
+import kevie.tasks.Task;
 import kevie.tasks.TaskList;
 
-public class EventCommand extends Command {
-    public EventCommand() {
-        super("event");
+public class EventCommand extends TaskCommand {
+
+    private final String fromSeperator = "/from";
+    private final String toSeperator = "/to";
+
+    public EventCommand(UserInterface ui, TaskList taskList) {
+        super("event", ui, taskList);
     }
 
     @Override
     public boolean execute(String arg) throws CmdSyntaxException {
         if (arg == null){
-            throw new CmdSynNoArgException(this);
+            throw new CmdSynNoArgException(this, ui);
         }
 
         String description;
@@ -22,34 +28,34 @@ public class EventCommand extends Command {
         Event newEvent;
 
         try {
-            eventArgs = arg.split(" /from ");
+            eventArgs = arg.split(" " + fromSeperator + " ");
             description = eventArgs[0];
-            eventArgs = eventArgs[1].split(" /to ");
+            eventArgs = eventArgs[1].split(" " + toSeperator + " ");
         } catch (Exception e) {
-            throw new CmdSyntaxException("Event description, start time or end time not indicated", this);
+            throw new CmdSyntaxException("Event description, start time or end time not indicated", this, ui);
         }
 
         try {
             newEvent = new Event(description, eventArgs[0], eventArgs[1]);
         } catch (Exception e) {
-            throw new CmdSyntaxException("Event end time not given", this);
+            throw new CmdSyntaxException("Event end time not given", this, ui);
         }
 
-        TaskList.instance.addTask(newEvent);
-        TaskList.instance.save();
-        Kevie.speak("Good! Adding new event to the list: ");
-        Kevie.speak(newEvent.toString(), true);
-        Kevie.speak("You now have " + TaskList.instance.getLength() + " tasks.", true);
+        taskList.addTask(newEvent);
+        taskList.save(ui);
+        ui.botSpeak("Good! Adding new event to the list: ");
+        ui.botSpeak(newEvent.toString(), true);
+        ui.botSpeak("You now have " + taskList.getLength() + " tasks.", true);
         return false;
     }
 
     @Override
     public String syntax() {
-        return "event [Description] /from [Start Time] /to [End Time]";
+        return "event [Description] " + fromSeperator + " [Start Time] " + toSeperator + " [End Time]";
     }
 
     @Override
     public String example() {
-        return "event CS2113 team project meeting /from Sep 1st 6pm /to Sep 1st 8pm";
+        return "event CS2113 team project meeting " + fromSeperator + " Sep 1st 6pm " + toSeperator + " Sep 1st 8pm";
     }
 }

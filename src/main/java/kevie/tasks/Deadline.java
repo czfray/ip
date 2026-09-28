@@ -1,5 +1,6 @@
 package kevie.tasks;
 
+import kevie.UserInterface;
 import kevie.exceptions.FileBadRawException;
 
 public class Deadline extends Task{
@@ -11,12 +12,12 @@ public class Deadline extends Task{
         this.due = endTime;
     }
 
-    public Deadline(String[] rawArgs, int lineNo) throws FileBadRawException {
-        super(rawArgs, lineNo);
+    public Deadline(String[] rawArgs, int lineNo, UserInterface ui) throws FileBadRawException {
+        super(rawArgs, lineNo, ui);
         try {
             this.due = rawArgs[3];
         } catch (Exception e){
-            throw new FileBadRawException(lineNo);
+            throw new FileBadRawException(lineNo, ui);
         }
     }
 

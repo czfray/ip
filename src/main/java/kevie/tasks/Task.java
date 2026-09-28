@@ -1,5 +1,6 @@
 package kevie.tasks;
 
+import kevie.UserInterface;
 import kevie.exceptions.FileBadRawException;
 
 public class Task {
@@ -17,12 +18,12 @@ public class Task {
         this.isDone = false;
     }
 
-    public Task(String[] rawArgs, int lineNo) throws FileBadRawException {
+    public Task(String[] rawArgs, int lineNo, UserInterface ui) throws FileBadRawException {
         try{
             this.name = rawArgs[1];
             this.isDone = Boolean.parseBoolean(rawArgs[2]);
         } catch (Exception e) {
-            throw new FileBadRawException(lineNo);
+            throw new FileBadRawException(lineNo, ui);
         }
     }
 

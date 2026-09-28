@@ -1,6 +1,7 @@
 package kevie.tasks;
 
 import kevie.Kevie;
+import kevie.UserInterface;
 import kevie.exceptions.FileBadRawException;
 import kevie.exceptions.FileCorruptionException;
 
@@ -13,16 +14,12 @@ import java.util.regex.Pattern;
 import java.util.ArrayList;
 
 public class TaskList {
-
-    public static TaskList instance;
-
+    private static String SAVE_PATH = "saves/tasks.kv";
 
     private ArrayList<Task> tasks;
-    private String save_path;
 
-    public TaskList(String save_path){
+    public TaskList(){
         tasks = new ArrayList<Task>();
-        this.save_path = save_path;
     }
 
     public void addTask(Task newTask){
@@ -54,9 +51,9 @@ public class TaskList {
         return tasks.size();
     }
 
-    public void printAll(){
+    public void printAll(UserInterface ui){
         for (int i = 0; i < getLength(); i++) {
-            Kevie.speak((i + 1) + ". " + tasks.get(i).toString(), true);
+            ui.botSpeak((i + 1) + ". " + tasks.get(i).toString(), true);
         }
     }
 
@@ -70,10 +67,10 @@ public class TaskList {
         return result;
     }
 
-    public void save(){
+    public void save(UserInterface ui){
         try{
 
-            FileWriter writer = new FileWriter(save_path);
+            FileWriter writer = new FileWriter(SAVE_PATH);
 
             for (int i = 0; i < getLength(); i++) {
                 writer.write(getTask(i).getRaw());
@@ -82,36 +79,35 @@ public class TaskList {
             writer.close();
 
         } catch (IOException e) {
-            Kevie.speak("I cannot save the list of tasks because an IO error occurred.");
+            ui.botSpeak("I cannot save the list of tasks because an IO error occurred.");
         }
     }
 
-    public static TaskList load(String path) throws FileCorruptionException {
-        TaskList tasks = new TaskList(path);
+    public static TaskList load(UserInterface ui) throws FileCorruptionException {
+        TaskList tasks = new TaskList();
         int lineNo = 0;
 
         try{
-            File file = new File(path);
+            File file = new File(SAVE_PATH);
             file.getParentFile().mkdirs();
             file.createNewFile();
             Scanner scanner = new Scanner(file);
             while (scanner.hasNextLine()) {
-
                 try{
                     String[] rawArgs = scanner.nextLine().split(Pattern.quote(Task.RAW_SEPERATOR));
                     lineNo++;
                     switch (rawArgs[0]){
                         case "T":
-                            tasks.addTask(new Todo(rawArgs, lineNo));
+                            tasks.addTask(new Todo(rawArgs, lineNo, ui));
                             break;
                         case "D":
-                            tasks.addTask(new Deadline(rawArgs, lineNo));
+                            tasks.addTask(new Deadline(rawArgs, lineNo, ui));
                             break;
                         case "E":
-                            tasks.addTask(new Event(rawArgs, lineNo));
+                            tasks.addTask(new Event(rawArgs, lineNo, ui));
                             break;
                         default:
-                            throw new FileBadRawException(lineNo);
+                            throw new FileBadRawException(lineNo, ui);
                     }
                 }
                 catch (FileBadRawException e){
@@ -121,10 +117,10 @@ public class TaskList {
             scanner.close();
 
         } catch (IOException e){
-            throw new FileCorruptionException("Cannot open file.");
+            throw new FileCorruptionException("Cannot open file.", ui);
         }
 
-        tasks.save();
+        tasks.save(ui);
         return tasks;
     }
 }

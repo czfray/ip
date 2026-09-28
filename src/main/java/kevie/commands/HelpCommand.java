@@ -1,17 +1,22 @@
 package kevie.commands;
 
 import kevie.Kevie;
+import kevie.UserInterface;
+import kevie.tasks.TaskList;
 
 public class HelpCommand extends Command{
 
-    public HelpCommand() {
-        super("help");
+    private Parser parser;
+
+    public HelpCommand(UserInterface ui, Parser parser) {
+        super("help", ui);
+        this.parser = parser;
     }
 
     @Override
     public boolean execute(String arg) {
-        Kevie.speak("Here is all the list of commands and their corresponding syntax: ");
-        Command.listCommands();
+        ui.botSpeak("Here is all the list of commands and their corresponding syntax: ");
+        parser.listCommands();
         return false;
     }
 
