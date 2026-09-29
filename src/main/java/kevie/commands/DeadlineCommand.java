@@ -1,6 +1,7 @@
 package kevie.commands;
 
 import kevie.Kevie;
+import kevie.Storage;
 import kevie.UserInterface;
 import kevie.exceptions.CmdSynNoArgException;
 import kevie.exceptions.CmdSyntaxException;
@@ -11,7 +12,7 @@ import kevie.tasks.TaskList;
 /**
  * Command that creates a deadline task in the todo list.
  */
-public class DeadlineCommand extends TaskCommand {
+public class DeadlineCommand extends TaskSaveCommand {
 
     private final String dueSeperator = "/by";
 
@@ -20,9 +21,10 @@ public class DeadlineCommand extends TaskCommand {
      *
      * @param ui User interface to print messages in
      * @param taskList Todo list to modify
+     * @param storage Storage to save modified todo list in.
      */
-    public DeadlineCommand(UserInterface ui, TaskList taskList) {
-        super("deadline", ui, taskList);
+    public DeadlineCommand(UserInterface ui, TaskList taskList, Storage storage) {
+        super("deadline", ui, taskList, storage);
     }
 
     @Override
@@ -43,7 +45,7 @@ public class DeadlineCommand extends TaskCommand {
 
         Deadline newDeadline = new Deadline(deadlineArgs[0], deadlineArgs[1]);
         taskList.addTask(newDeadline);
-        taskList.save(ui);
+        storage.save(taskList, ui);
         ui.botSpeak("Okay I added new deadline to the list: ");
         ui.botSpeak(newDeadline.toString(), true);
         ui.botSpeak("You now have " + taskList.getLength() + " tasks.", true);

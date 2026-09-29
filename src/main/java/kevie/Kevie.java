@@ -12,8 +12,9 @@ import java.util.Scanner;
  */
 public class Kevie {
     private UserInterface ui;
+    private Storage storage;
     private TaskList taskList;
-    private Parser parser;
+    private CommandParser parser;
 
     /**
      * Runs Kevie
@@ -32,8 +33,10 @@ public class Kevie {
         ui.printBanner();
         ui.botSpeak("Hey, what's up!");
 
+        storage = new Storage("saves/tasks.kv");
+
         try{
-            this.taskList = TaskList.load(ui);
+            this.taskList = storage.load(ui);
         } catch (FileCorruptionException e){
             taskList = new TaskList();
             e.printMessage();
@@ -44,16 +47,16 @@ public class Kevie {
     }
 
     private void registerCommands(){
-        parser = new Parser(ui);
+        parser = new CommandParser(ui);
         parser.register(new ByeCommand(ui));
         parser.register(new HelpCommand(ui, parser));
         parser.register(new ListCommand(ui, taskList));
-        parser.register(new TodoCommand(ui, taskList));
-        parser.register(new DeadlineCommand(ui, taskList));
-        parser.register(new EventCommand(ui, taskList));
-        parser.register(new MarkCommand(ui, taskList));
-        parser.register(new UnmarkCommand(ui, taskList));
-        parser.register(new DeleteCommand(ui, taskList));
+        parser.register(new TodoCommand(ui, taskList, storage));
+        parser.register(new DeadlineCommand(ui, taskList, storage));
+        parser.register(new EventCommand(ui, taskList, storage));
+        parser.register(new MarkCommand(ui, taskList, storage));
+        parser.register(new UnmarkCommand(ui, taskList, storage));
+        parser.register(new DeleteCommand(ui, taskList, storage));
         parser.register(new FindCommand(ui, taskList));
     }
 

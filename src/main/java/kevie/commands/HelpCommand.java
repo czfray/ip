@@ -1,15 +1,13 @@
 package kevie.commands;
 
-import kevie.Kevie;
 import kevie.UserInterface;
-import kevie.tasks.TaskList;
 
 /**
  * Command that prints all commands and their syntax.
  */
 public class HelpCommand extends Command{
 
-    private Parser parser;
+    private CommandParser parser;
 
     /**
      * Creates help command.
@@ -17,7 +15,7 @@ public class HelpCommand extends Command{
      * @param ui User interface to print messages in
      * @param parser Parser with the command list
      */
-    public HelpCommand(UserInterface ui, Parser parser) {
+    public HelpCommand(UserInterface ui, CommandParser parser) {
         super("help", ui);
         this.parser = parser;
     }

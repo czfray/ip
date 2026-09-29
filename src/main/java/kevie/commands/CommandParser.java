@@ -1,16 +1,14 @@
 package kevie.commands;
 
-import kevie.Kevie;
 import kevie.UserInterface;
 import kevie.exceptions.CmdNoExistException;
 import kevie.exceptions.KevieException;
-import kevie.tasks.TaskList;
 
 /**
  * Parses command keywords in text and executes them.
  * Contains a list of all commands for parsing.
  */
-public class Parser {
+public class CommandParser {
     private final int MAX_COMMAND_NO = 100;
     private Command[] commands;
     private int commands_length;
@@ -22,7 +20,7 @@ public class Parser {
      *
      * @param ui User interface to print messages in
      */
-    public Parser(UserInterface ui){
+    public CommandParser(UserInterface ui){
         commands = new Command[MAX_COMMAND_NO];
         commands_length = 0;
         this.ui = ui;

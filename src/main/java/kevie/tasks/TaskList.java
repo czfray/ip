@@ -16,8 +16,6 @@ import java.util.ArrayList;
  * Represents a todo list consisting of a lot of tasks.
  */
 public class TaskList {
-    private static String SAVE_PATH = "saves/tasks.kv";
-
     private ArrayList<Task> tasks;
 
     /**
@@ -101,74 +99,5 @@ public class TaskList {
             }
         }
         return result;
-    }
-
-    /**
-     * Save the todo list in a save file.
-     *
-     * @param ui User interface to print exceptions in.
-     */
-    public void save(UserInterface ui){
-        try{
-
-            FileWriter writer = new FileWriter(SAVE_PATH);
-
-            for (int i = 0; i < getLength(); i++) {
-                writer.write(getTask(i).getRaw());
-                if (i < getLength() - 1) writer.write(System.lineSeparator());
-            }
-            writer.close();
-
-        } catch (IOException e) {
-            ui.botSpeak("I cannot save the list of tasks because an IO error occurred.");
-        }
-    }
-
-    /**
-     * Loads todo list from a save file.
-     *
-     * @param ui User interface to print exceptions in.
-     * @return The todo list loaded from save file.
-     * @throws FileCorruptionException If there is an IO error occurred.
-     */
-    public static TaskList load(UserInterface ui) throws FileCorruptionException {
-        TaskList tasks = new TaskList();
-        int lineNo = 0;
-
-        try{
-            File file = new File(SAVE_PATH);
-            file.getParentFile().mkdirs();
-            file.createNewFile();
-            Scanner scanner = new Scanner(file);
-            while (scanner.hasNextLine()) {
-                try{
-                    String[] rawArgs = scanner.nextLine().split(Pattern.quote(Task.RAW_SEPERATOR));
-                    lineNo++;
-                    switch (rawArgs[0]){
-                        case "T":
-                            tasks.addTask(new Todo(rawArgs, lineNo, ui));
-                            break;
-                        case "D":
-                            tasks.addTask(new Deadline(rawArgs, lineNo, ui));
-                            break;
-                        case "E":
-                            tasks.addTask(new Event(rawArgs, lineNo, ui));
-                            break;
-                        default:
-                            throw new FileBadRawException(lineNo, ui);
-                    }
-                }
-                catch (FileBadRawException e){
-                    e.printMessage();
-                }
-            }
-            scanner.close();
-
-        } catch (IOException e){
-            throw new FileCorruptionException("Cannot open file.", ui);
-        }
-
-        tasks.save(ui);
-        return tasks;
     }
 }

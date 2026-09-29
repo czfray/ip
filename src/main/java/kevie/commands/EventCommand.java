@@ -1,6 +1,7 @@
 package kevie.commands;
 
 import kevie.Kevie;
+import kevie.Storage;
 import kevie.UserInterface;
 import kevie.exceptions.CmdSynNoArgException;
 import kevie.exceptions.CmdSyntaxException;
@@ -11,7 +12,7 @@ import kevie.tasks.TaskList;
 /**
  * Command that creates an event task in the todo list.
  */
-public class EventCommand extends TaskCommand {
+public class EventCommand extends TaskSaveCommand {
 
     private final String fromSeperator = "/from";
     private final String toSeperator = "/to";
@@ -21,9 +22,10 @@ public class EventCommand extends TaskCommand {
      *
      * @param ui User interface to print messages in
      * @param taskList Todo list to modify
+     * @param storage Storage to save modified todo list in.
      */
-    public EventCommand(UserInterface ui, TaskList taskList) {
-        super("event", ui, taskList);
+    public EventCommand(UserInterface ui, TaskList taskList, Storage storage) {
+        super("event", ui, taskList, storage);
     }
 
     @Override
@@ -51,7 +53,7 @@ public class EventCommand extends TaskCommand {
         }
 
         taskList.addTask(newEvent);
-        taskList.save(ui);
+        storage.save(taskList, ui);
         ui.botSpeak("Good! Adding new event to the list: ");
         ui.botSpeak(newEvent.toString(), true);
         ui.botSpeak("You now have " + taskList.getLength() + " tasks.", true);

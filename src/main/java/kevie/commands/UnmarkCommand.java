@@ -1,6 +1,7 @@
 package kevie.commands;
 
 import kevie.Kevie;
+import kevie.Storage;
 import kevie.UserInterface;
 import kevie.exceptions.*;
 import kevie.tasks.Task;
@@ -9,16 +10,17 @@ import kevie.tasks.TaskList;
 /**
  * Command that set a task in the todo list as not done.
  */
-public class UnmarkCommand extends TaskCommand {
+public class UnmarkCommand extends TaskSaveCommand {
 
     /**
      * Creates unmark command.
      *
      * @param ui User interface to print messages in
      * @param taskList Todo list to modify
+     * @param storage Storage to save modified todo list in.
      */
-    public UnmarkCommand(UserInterface ui, TaskList taskList) {
-        super("unmark", ui, taskList);
+    public UnmarkCommand(UserInterface ui, TaskList taskList, Storage storage) {
+        super("unmark", ui, taskList, storage);
     }
 
     @Override
@@ -48,7 +50,7 @@ public class UnmarkCommand extends TaskCommand {
             return false;
         }
         unmarkedTask.setDone(false);
-        taskList.save(ui);
+        storage.save(taskList, ui);
         ui.botSpeak("Ok! I have marked a task as undone:");
         ui.botSpeak(unmarkedTask.toString(), true);
         return false;

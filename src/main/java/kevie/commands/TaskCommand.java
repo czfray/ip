@@ -5,7 +5,7 @@ import kevie.exceptions.KevieException;
 import kevie.tasks.TaskList;
 
 /**
- * Command that would modifies would modify the todo list.
+ * Command that would modify the todo list.
  */
 public abstract class TaskCommand extends Command{
 

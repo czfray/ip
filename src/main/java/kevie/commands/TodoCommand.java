@@ -1,6 +1,7 @@
 package kevie.commands;
 
 import kevie.Kevie;
+import kevie.Storage;
 import kevie.UserInterface;
 import kevie.exceptions.CmdSynNoArgException;
 import kevie.exceptions.CmdSyntaxException;
@@ -10,16 +11,17 @@ import kevie.tasks.Todo;
 /**
  * Command that creates a simple todo task in the todo list.
  */
-public class TodoCommand extends TaskCommand {
+public class TodoCommand extends TaskSaveCommand {
 
     /**
      * Creates todo command.
      *
      * @param ui User interface to print messages in
      * @param taskList Todo list to modify
+     * @param storage Storage to save modified todo list in.
      */
-    public TodoCommand(UserInterface ui, TaskList taskList) {
-        super("todo", ui, taskList);
+    public TodoCommand(UserInterface ui, TaskList taskList, Storage storage) {
+        super("todo", ui, taskList, storage);
     }
 
     @Override
@@ -29,7 +31,7 @@ public class TodoCommand extends TaskCommand {
         }
         Todo newTodo = new Todo(arg);
         taskList.addTask(newTodo);
-        taskList.save(ui);
+        storage.save(taskList, ui);
         ui.botSpeak("Alright I added new todo to the list: ");
         ui.botSpeak(newTodo.toString(), true);
         ui.botSpeak("You now have " + taskList.getLength() + " tasks.", true);

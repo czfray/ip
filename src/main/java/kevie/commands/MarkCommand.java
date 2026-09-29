@@ -1,6 +1,7 @@
 package kevie.commands;
 
 import kevie.Kevie;
+import kevie.Storage;
 import kevie.UserInterface;
 import kevie.exceptions.*;
 import kevie.tasks.Task;
@@ -9,16 +10,17 @@ import kevie.tasks.TaskList;
 /**
  * Command that marks a task as done.
  */
-public class MarkCommand extends TaskCommand {
+public class MarkCommand extends TaskSaveCommand {
 
     /**
      * Creates mark command.
      *
      * @param ui User interface to print messages in
      * @param taskList Todo list to modify
+     * @param storage Storage to save modified todo list in.
      */
-    public MarkCommand(UserInterface ui, TaskList taskList) {
-        super("mark", ui, taskList);
+    public MarkCommand(UserInterface ui, TaskList taskList, Storage storage) {
+        super("mark", ui, taskList, storage);
     }
 
     @Override
@@ -48,7 +50,7 @@ public class MarkCommand extends TaskCommand {
             return false;
         }
         markedTask.setDone(true);
-        taskList.save(ui);
+        storage.save(taskList, ui);
         ui.botSpeak("Ok! I have marked a task as done: ");
         ui.botSpeak(markedTask.toString(), true);
         return false;
