@@ -11,7 +11,7 @@ public class Task {
     private final static String NOT_DONE_CHAR = "[ ]";
     private final static String DONE_CHAR = "[V]";
 
-    /*
+    /**
      * String that separates between different arguments in a save file.
      */
     public final static String RAW_SEPERATOR = "\\\\";

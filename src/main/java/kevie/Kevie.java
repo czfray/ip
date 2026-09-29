@@ -25,7 +25,7 @@ public class Kevie {
         new Kevie().run();
     }
 
-    /*
+    /**
      * Creates an instance of Kevie.
      */
     public Kevie(){

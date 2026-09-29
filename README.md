@@ -1,6 +1,9 @@
 # Kevie project
 
-This is a project for a CS Course. It's named after my friend _Keven_. Given below are instructions on how to use it.
+This is an individual project for the CS2107 course in NUS (AY 2026/27 Fall).
+It's named after my friend _Keven_. Given below are instructions on how to open the source code of Kevie.
+
+If you are looking for **How to use Kevie** instead of how to open the source code, please refer to the [Kevie User Guide](https://czfray.github.io/ip/ "Kevie User Guide").
 
 ## Setting up in Intellij
 
