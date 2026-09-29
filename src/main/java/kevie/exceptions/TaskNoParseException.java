@@ -13,6 +13,6 @@ public class TaskNoParseException extends TaskNoException{
      * @param ui User interface to print messages in
      */
     public TaskNoParseException(UserInterface ui) {
-        super("Task no. argument given not a number", ui);
+        super("Task no. argument given not an integer", ui);
     }
 }
