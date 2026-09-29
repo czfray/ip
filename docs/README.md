@@ -1,7 +1,6 @@
 # Kevie User Guide
 
 A simple CLI application that allows you to keep track of your tasks in an organised way.
-For the Java API documentation, see the [Javadocs](javadocs/index.html).
 
 ## Table of Contents
 

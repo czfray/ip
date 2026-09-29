@@ -1,1 +1,0 @@
-packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html","k":"18"},{"l":"kevie"},{"l":"kevie.commands"},{"l":"kevie.exceptions"},{"l":"kevie.tasks"}];updateSearchResults();
