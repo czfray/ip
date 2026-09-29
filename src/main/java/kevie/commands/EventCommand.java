@@ -49,7 +49,7 @@ public class EventCommand extends TaskSaveCommand {
         try {
             newEvent = new Event(description, eventArgs[0], eventArgs[1]);
         } catch (Exception e) {
-            throw new CmdSyntaxException("Event end time not given", this, ui);
+            throw new CmdSyntaxException("Event start time or end time not given", this, ui);
         }
 
         taskList.addTask(newEvent);
